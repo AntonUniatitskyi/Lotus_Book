@@ -1,0 +1,60 @@
+<a href="/" class="d-flex align-items-center mb-3 text-decoration-none link-body-emphasis">
+  <ion-icon name="book-outline" class="me-2" size="large"></ion-icon>
+  <span class="fs-4">Lotus</span>
+</a>
+<hr>
+<ul class="nav nav-pills flex-column mb-auto">
+  <li class="nav-item">
+    <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %} active {% else %} link-body-emphasis {% endif %}">
+      <i class="bi bi-house-door me-2"></i> Главная
+    </a>
+  </li>
+  <li>
+    <a href="#" class="nav-link link-body-emphasis">
+      <i class="bi bi-speedometer2 me-2"></i> Dashboard
+    </a>
+  </li>
+  <li>
+    <a href="#" class="nav-link link-body-emphasis">
+      <i class="bi bi-table me-2"></i> Orders
+    </a>
+  </li>
+  <li>
+    <a href="{% url 'all_quotes' %}" class="nav-link {% if request.resolver_match.url_name == 'all_quotes' %} active {% else %} link-body-emphasis {% endif %}">
+      <i class="bi bi-grid me-2"></i> Цитаты
+    </a>
+  </li>
+  <li>
+    <a href="#" class="nav-link link-body-emphasis">
+      <i class="bi bi-people me-2"></i> Customers
+    </a>
+  </li>
+</ul>
+<div class="dropdown mt-auto">
+    <hr class="mb-3">
+    {% if user.is_authenticated %}
+        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{ user.profile.get_avatar_url }}" alt="avatar" width="32" height="32" class="rounded-circle me-2">
+            <strong>{{ user.username }}</strong>
+        </a>
+        <ul class="dropdown-menu text-small shadow">
+            <li><a class="dropdown-item" href="{% url 'add_book' %}">Новая книга...</a></li>
+            <li><a class="dropdown-item" href="{% url 'settings' %}">Настройки</a></li>
+            <li><a class="dropdown-item" href="{% url 'account' %}">Профиль</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form method="POST" class="dropdown-item" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item" style="color: red; background: none; border: none; padding: 0; width: 100%; text-align: left;">
+                        Выйти
+                    </button>
+                </form>
+            </li>
+        </ul>
+    {% else %}
+        <a href="{% url 'login' %}" class="d-flex align-items-center text-decoration-none">
+            <strong>Войти</strong>
+        </a>
+    {% endif %}
+
+</div>

@@ -1,0 +1,105 @@
+{% extends 'books/base.html' %}
+
+{% block title %}Реєстрація{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h2>Створити акаунт</h2>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+
+        <input type="hidden" name="next" value="{{ next }}">
+        <!-- Email -->
+        <div class="mb-3">
+            <label for="id_email" class="form-label">Пошта</label>
+            <div class="input-group position-relative">
+                <i class="input-group-icon fas fa-envelope"></i>
+                {{ form.email }}
+            </div>
+        </div>
+
+        <!-- Username -->
+        <div class="mb-3">
+            <label for="id_username" class="form-label">Юзернейм</label>
+            <div class="input-group position-relative">
+                <i class="input-group-icon fas fa-user"></i>
+                {{ form.username }}
+            </div>
+        </div>
+
+        <!-- Password 1 -->
+        <div class="mb-3">
+            <label for="id_password1" class="form-label">Пароль</label>
+            <div class="input-group position-relative">
+                <i class="input-group-icon fas fa-lock"></i>
+                {{ form.password1 }}
+                <i class="toggle-password fas fa-eye" data-target="id_password1"></i>
+            </div>
+        </div>
+
+        <!-- Password 2 -->
+        <div class="mb-3">
+            <label for="id_password2" class="form-label">Повторіть пароль</label>
+            <div class="input-group position-relative">
+                <i class="input-group-icon fas fa-lock"></i>
+                {{ form.password2 }}
+                <i class="toggle-password fas fa-eye" data-target="id_password2"></i>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Зареєструватися</button>
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <div class="mt-2 mb-3 text-center font-sans">
+            <span class="text-sm text-gray-500">Вже маєте акаунт?</span>
+            <a href="{% url 'login' %}" class="ml-2 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors duration-200">Увійти</a>
+        </div>
+    </form>
+
+</div>
+
+<!-- Пароль toggle + sweetalert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Переключение отображения паролей
+    document.querySelectorAll('.toggle-password').forEach(toggle => {
+      const target = document.getElementById(toggle.dataset.target);
+      toggle.addEventListener('click', () => {
+        const type = target.getAttribute('type') === 'password' ? 'text' : 'password';
+        target.setAttribute('type', type);
+        toggle.classList.toggle('fa-eye');
+        toggle.classList.toggle('fa-eye-slash');
+      });
+    });
+
+    // SweetAlert для сообщений
+    {% for message in messages %}
+    Swal.fire({
+        title: '{{ message.tags|default:"Інформація"|capfirst }}',
+        text: '{{ message }}',
+        icon: '{% if "error" in message.tags %}error{% elif "success" in message.tags %}success{% else %}info{% endif %}',
+        showCancelButton: true,
+        confirmButtonText: '{% if "success" in message.tags %}До профілю{% else %}OK{% endif %}',
+        cancelButtonText: 'Відміна',
+    }).then((result) => {
+        {% if "success" in message.tags %}
+        if (result.isConfirmed) {
+            window.location.href = "{% url 'users:account' %}";
+        }
+        {% endif %}
+    });
+    {% endfor %}
+  });
+</script>
+{% endblock %}

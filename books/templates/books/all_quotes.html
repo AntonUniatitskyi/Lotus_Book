@@ -1,0 +1,49 @@
+{% extends 'books/base.html' %}
+
+{% block title %}Цитаты{% endblock title %}
+
+{% block content %}
+<section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-4xl font-bold text-center text-gray-900 mb-10">Все цитаты</h1>
+
+    {% if quotes %}
+        <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2">
+            {% for quote in quotes %}
+                <div class="relative bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 p-6">
+                    <!-- Линия слева -->
+                    <div class="absolute left-0 top-0 h-full w-1 bg-indigo-500 rounded-l-2xl"></div>
+
+                    <!-- Иконка цитаты -->
+                    <div class="text-indigo-500 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M9 13h2V9H9v4zm4 0h2V9h-2v4zm5-6a2 2 0 012 2v10a2 2 0 01-2 2h-4l-3 3-3-3H5a2 2 0 01-2-2V9a2 2 0 012-2h14z"/>
+                        </svg>
+                    </div>
+
+                    <!-- Текст цитаты -->
+                    <blockquote class="text-gray-800 text-lg italic leading-relaxed mb-4">
+                        “{{ quote.text }}”
+                    </blockquote>
+
+                    <!-- Информация о книге -->
+                    <p class="text-sm text-gray-600 mb-1">
+                        <span class="font-medium text-gray-800">Книга:</span>
+                        <span class="text-base font-semibold text-gray-900">{{ quote.book.title }}</span>
+                    </p>
+                    <p class="text-sm text-gray-600 mb-1">
+                        <span class="font-medium text-gray-800">Автор:</span>
+                        <span class="text-base font-semibold text-gray-900">{{ quote.book.author }}</span>
+                    </p>
+
+                    <!-- Дата добавления -->
+                    <p class="text-xs text-gray-400 mt-3">Добавлено: {{ quote.created_at|date:"d M Y" }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-gray-500 italic text-center mt-10 text-lg">Пока нет ни одной цитаты. Добавьте первую!</p>
+    {% endif %}
+</section>
+{% endblock content %}

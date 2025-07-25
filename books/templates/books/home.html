@@ -1,0 +1,49 @@
+{% extends 'books/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <section class="text-center mb-16">
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 mb-4">
+            Добро пожаловать в <span class="text-indigo-600">Lotus</span>
+        </h1>
+        <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto text-balance mb-6">
+            Собирайте цитаты, мысли и вдохновение из книг. Ваш личный литературный архив — всегда под рукой.
+        </p>
+        <a href="{% url 'add_book' %}"
+           class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm sm:text-base font-medium px-6 py-3 rounded-full shadow-md transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 4v16m8-8H4"/>
+            </svg>
+            Добавить книгу
+        </a>
+    </section>
+
+    <section>
+        <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800 mb-8 border-b pb-2 border-gray-200">
+            📝 Последние цитаты
+        </h2>
+
+        {% if recent_quotes %}
+            <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
+                {% for quote in recent_quotes %}
+                    <div class="relative bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition p-5">
+                        <div class="absolute left-0 top-0 h-full w-1 bg-indigo-500 rounded-l-xl"></div>
+                        <blockquote class="text-gray-800 italic leading-relaxed mb-3">
+                            “{{ quote.text }}”
+                        </blockquote>
+                        <p class="text-sm text-gray-500">
+                            — <strong>{{ quote.book.title }}</strong> от {{ quote.book.author }}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500 italic text-center mt-6">Пока нет ни одной цитаты. Добавьте первую!</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

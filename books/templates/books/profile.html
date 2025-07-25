@@ -1,0 +1,67 @@
+{% extends 'books/base.html' %}
+
+{% block title %}Профіль{% endblock title %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10 bg-white rounded-2xl shadow-lg p-6">
+    {% if user %}
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+            <!-- Аватар -->
+            <div class="shrink-0">
+                <img src="{{ user.profile.get_avatar_url }}" alt="Аватар" class="w-32 h-32 rounded-full border-4 border-gray-200 object-cover">
+            </div>
+            <!-- Инфо -->
+            <div class="flex-1">
+                <div class="flex items-center gap-4 flex-wrap">
+                    <h2 class="text-3xl font-semibold text-gray-800">{{ user.username }}</h2>
+                    {% if user.groups.first.name == 'Адміністратор' %}
+                        <span class="bg-red-600 text-white text-sm font-semibold px-3 py-1 rounded-full">👑 Админ</span>
+                    {% endif %}
+                    <a href="{% url 'settings' %}" class="ml-auto text-blue-500 hover:underline">⚙️ Настройки</a>
+                </div>
+                {% if user.email %}
+                    <p class="mt-2 text-gray-600 max-w-xl">{{ user.email }}</p>
+                {% endif %}
+                {% if user.profile.bio %}
+                    <p class="mt-2 text-gray-600 max-w-xl">{{ user.profile.bio }}</p>
+                {% endif %}
+                <!-- Статистика -->
+                <div class="flex gap-6 mt-4 text-gray-700 text-sm font-medium">
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-8 border-gray-300">
+        <!-- Здесь можно добавить блок с постами, вкладками и т.д. -->
+        {% if books %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+                {% for book in books %}
+                    <a href="{% url 'book_detail' slug=book.slug %}">
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                            {% if book.cover %}
+                                <img src="{{ book.cover.url }}" alt="{{ book.title }}" class="w-full h-48 object-cover">
+                            {% else %}
+                                <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                                    Без обложки
+                                </div>
+                            {% endif %}
+                            <div class="p-4">
+                                <h2 class="text-lg font-semibold text-gray-800 truncate">{{ book.title }}</h2>
+                                <p class="text-sm text-gray-600 mb-1">Автор: {{ book.author }}</p>
+                                {% if book.text_author %}
+                                    <p class="text-gray-700 text-sm line-clamp-3">{{ book.text_author }}</p>
+                                {% endif %}
+                                <span class="text-xs text-gray-400 block mt-2">{{ book.created_at|date:"d.m.Y" }}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center text-gray-500 mt-10">
+                <p>У вас ще немає доданих книжок 📚</p>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock content %}

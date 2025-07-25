@@ -1,0 +1,17 @@
+
+<div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="mobileSidebarLabel">Меню</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
+  </div>
+  <div class="offcanvas-body d-flex flex-column h-100">
+    {% include 'books/partials/sidebar_items.html' %}
+  </div>
+</div>
+
+
+<nav class="col-md-3 col-lg-2 d-none d-md-block bg-body-tertiary sidebar py-3 position-sticky top-0" style="height: 100vh;">
+  <div class="px-3 d-flex flex-column h-100">
+    {% include 'books/partials/sidebar_items.html' %}
+  </div>
+</nav>

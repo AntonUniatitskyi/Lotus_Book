@@ -1,0 +1,69 @@
+{% extends 'books/base.html' %}
+
+{% block title %}Вхід{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h2>Увійти в акаунт</h2>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+
+        <input type="hidden" name="next" value="{{ next }}">
+        <!-- Username -->
+        <div class="mb-3">
+        <label for="id_username" class="form-label">Юзернейм</label>
+        <div class="input-group position-relative">
+            <i class="input-group-icon fas fa-user"></i>
+            {{ form.username }}
+        </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+        <label for="id_password" class="form-label">Пароль</label>
+        <div class="input-group position-relative">
+            <i class="input-group-icon fas fa-lock"></i>
+            {{ form.password }}
+            <i class="toggle-password fas fa-eye" data-target="id_password"></i>
+        </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-submit">Увійти</button>
+    </form>
+
+    <div class="mt-2 mb-3 text-center font-sans">
+        <span class="text-sm text-gray-500">Немає акаунту?</span>
+        <a href="{% url 'register' %}" class="ml-2 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors duration-200">Зареєструватися</a>
+    </div>
+
+
+  <!-- Errors -->
+  {% if form.errors %}
+  <div class="alert alert-danger">
+    <ul>
+      {% for field in form %}
+        {% for error in field.errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Скрипт переключения пароля -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.toggle-password').forEach(toggle => {
+      const target = document.getElementById(toggle.dataset.target);
+      toggle.addEventListener('click', () => {
+        const type = target.getAttribute('type') === 'password' ? 'text' : 'password';
+        target.setAttribute('type', type);
+        toggle.classList.toggle('fa-eye');
+        toggle.classList.toggle('fa-eye-slash');
+      });
+    });
+  });
+</script>
+{% endblock %}
